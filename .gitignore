@@ -6,6 +6,9 @@
 !/var/cache
 /var/cache/*
 !var/cache/.gitkeep
+!/var/database
+/var/database/*
+!var/database/.htaccess
 !/var/logs
 /var/logs/*
 !var/logs/.gitkeep
