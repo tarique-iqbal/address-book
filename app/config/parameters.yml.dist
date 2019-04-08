@@ -9,6 +9,7 @@ parameters:
     database_password: ~
     # You should uncomment this if you want to use pdo_sqlite
     database_path: '%kernel.project_dir%/var/database/lillydoo.sqlite'
+    test_database_path: '%kernel.project_dir%/var/database/test_lillydoo.sqlite'
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
