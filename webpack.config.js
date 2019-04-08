@@ -26,7 +26,8 @@ Encore
     //.addEntry('page2', './assets/js/page2.js')
 
     .addStyleEntry('css/app', [
-        './node_modules/bootstrap/dist/css/bootstrap.min.css'
+        './node_modules/bootstrap/dist/css/bootstrap.min.css',
+        './assets/css/app.css'
     ])
 
     // will require an extra script tag for runtime.js
