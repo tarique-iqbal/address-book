@@ -17,6 +17,7 @@ class DataFixtureTestCase extends WebTestCase
         self::runCommand('doctrine:database:drop --force');
         self::runCommand('doctrine:database:create');
         self::runCommand('doctrine:schema:create');
+        self::runCommand('doctrine:fixtures:load --no-interaction');
 
         $client = static::createClient();
         $this->entityManager = $client
