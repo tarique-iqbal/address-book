@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Address Book List{% endblock %}
+
+{% block body %}
+    <div class="card card-outline-secondary my-4">
+        <div class="card-header">
+            Address Book Home
+        </div>
+        <div class="card-body">
+            {% if address_books|length > 0 %}
+                {% for address_book in address_books %}
+                    <div class="row border-bottom text-secondary">
+                        <div class="col-3">{{ address_book.firstName|trim }} {{ address_book.lastName|trim }}</div>
+                        <div class="col-3">{{ address_book.email }}</div>
+                        <div class="col-3">
+                            {{ address_book.streetNumber }}<br/>
+                            {{ address_book.zip }} {{ address_book.city }}<br/>
+                        </div>
+                        <div class="col-3">
+                            <a href="#">Details</a> |
+                            <a href="#">Edit</a> |
+                            <a href="#">Delete</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                No Address Book found.
+            {% endif %}
+        </div>
+    </div>
+    <!-- /.card -->
+{% endblock %}
