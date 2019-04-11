@@ -41,12 +41,23 @@
                     <h1 class="my-4">Address Book</h1>
                     <div class="list-group">
                         <a href="#" class="list-group-item">List</a>
-                        <a href="#" class="list-group-item active">Add</a>
+                        <a href="#" class="list-group-item">Add</a>
                     </div>
                 </div>
                 <!-- /.col-lg-3 -->
 
-                {% block body %}{% endblock %}
+                <div class="col-lg-9">
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} my-4">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                    {% block body %}{% endblock %}
+                </div>
+                <!-- /.col-lg-9 -->
             </div>
         </div>
         <!-- /.container -->
