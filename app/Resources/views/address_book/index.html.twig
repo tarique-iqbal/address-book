@@ -18,7 +18,7 @@
                             {{ address_book.zip }} {{ address_book.city }}<br/>
                         </div>
                         <div class="col-3">
-                            <a href="#">Details</a> |
+                            <a href="{{ path('show_address_book', { 'id': address_book.id }) }}">Details</a> |
                             <a href="#">Edit</a> |
                             <a href="#">Delete</a>
                         </div>

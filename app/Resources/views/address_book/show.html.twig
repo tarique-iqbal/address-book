@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Address Book details{% endblock %}
+
+{% block body %}
+<div class="card card-outline-secondary my-4">
+    <div class="card-header">
+        Address Book details
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-7">
+                <img class="img-fluid" src="{{ asset('uploads/address_book/photos/' ~ address_book.photo) }}" alt="{{ address_book.photo }}" />
+            </div>
+
+            <div class="col-md-5">
+                <div>{{ address_book.firstName }} {{ address_book.lastName }}</div>
+                <div>{{ address_book.email }}</div>
+                <div>{{ address_book.streetNumber }}</div>
+                <div>{{ address_book.zip }} {{ address_book.city }}</div>
+                <div>{{ country_name }}</div>
+                <div>{{ address_book.phoneNumber }}</div>
+                <div>{{ address_book.birthDate|date("F d, Y") }}</div>
+                <div><a href="#">Edit</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.card -->
+{% endblock %}
