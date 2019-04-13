@@ -21,7 +21,7 @@
                 <div>{{ country_name }}</div>
                 <div>{{ address_book.phoneNumber }}</div>
                 <div>{{ address_book.birthDate|date("F d, Y") }}</div>
-                <div><a href="#">Edit</a></div>
+                <div><a href="{{ path('edit_address_book', { 'id': address_book.id }) }}">Edit</a></div>
             </div>
         </div>
     </div>

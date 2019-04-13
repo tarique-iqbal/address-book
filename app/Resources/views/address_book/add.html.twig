@@ -4,7 +4,12 @@
     <div class="col-lg-9">
         <div class="card card-outline-secondary my-4">
             <div class="card-header">
-                Add Address Book
+                {% if app.request.attributes.get("_route") == "add_address_book" %}
+                    Add
+                {% elseif app.request.attributes.get("_route") == "edit_address_book" %}
+                    Edit
+                {% endif %}
+                Address Book
             </div>
             <div class="card-body">
                 {% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}

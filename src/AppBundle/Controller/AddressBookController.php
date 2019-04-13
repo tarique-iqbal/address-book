@@ -6,6 +6,7 @@ use AppBundle\Entity\AddressBook;
 use AppBundle\Form\AddressBookType;
 use AppBundle\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,6 +112,51 @@ class AddressBookController extends AbstractController
 
         return $this->render('address_book/add.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param AddressBook $addressBook
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @return Response
+     *
+     * @Route("/edit/{id}", name="edit_address_book", requirements={"id"="\d+"})
+     */
+    public function edit(AddressBook $addressBook, Request $request, FileUploader $fileUploader): Response
+    {
+        if ($addressBook->getPhoto() !== null) {
+            $addressBook->setPhoto(new File($this->photoDirectory . '/' . $addressBook->getPhoto()));
+        }
+
+        $form = $this->createForm(AddressBookType::class, $addressBook);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $addressBook = $form->getData();
+            $photo = $addressBook->getPhoto();
+
+            if ($photo instanceof UploadedFile) {
+                $fileName = $fileUploader->upload($this->photoDirectory, $photo);
+                $addressBook->setPhoto($fileName);
+            } elseif ($photo instanceof File) {
+                $addressBook->setPhoto($photo->getFilename());
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->merge($addressBook);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Address Book has been updated successfully.'
+            );
+
+            return $this->redirectToRoute('address_book');
+        }
+
+        return $this->render('address_book/add.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
