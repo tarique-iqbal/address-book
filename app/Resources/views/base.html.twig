@@ -41,7 +41,7 @@
                     <h1 class="my-4">Address Book</h1>
                     <div class="list-group">
                         <a href="{{ path('address_book') }}" class="list-group-item {% if app.request.attributes.get("_route") == "address_book" %}active{% endif %}">List</a>
-                        <a href="#" class="list-group-item">Add</a>
+                        <a href="{{ path('add_address_book') }}" class="list-group-item {% if app.request.attributes.get("_route") == "add_address_book" %}active{% endif %}">Add</a>
                     </div>
                 </div>
                 <!-- /.col-lg-3 -->

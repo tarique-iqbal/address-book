@@ -3,7 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\AddressBook;
+use AppBundle\Form\AddressBookType;
+use AppBundle\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +17,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AddressBookController extends AbstractController
 {
+    /**
+     * @var string
+     */
+    private $photoDirectory;
+
+    /**
+     * AddressBookController constructor.
+     * @param string $photoDirectory
+     */
+    public function __construct(string $photoDirectory)
+    {
+        $this->photoDirectory = $photoDirectory;
+    }
+
     /**
      * @Route("/", name="address_book")
      */
@@ -53,6 +71,46 @@ class AddressBookController extends AbstractController
         return $this->render('address_book/show.html.twig', [
             'address_book' => $addressBook,
             'country_name' => $countryName,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @return Response
+     *
+     * @Route("/add", name="add_address_book")
+     */
+    public function add(Request $request, FileUploader $fileUploader): Response
+    {
+        $addressBook = new AddressBook();
+
+        $form = $this->createForm(AddressBookType::class, $addressBook);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $addressBook = $form->getData();
+            $photo = $addressBook->getPhoto();
+
+            if ($photo instanceof UploadedFile) {
+                $fileName = $fileUploader->upload($this->photoDirectory, $photo);
+                $addressBook->setPhoto($fileName);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($addressBook);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Address Book has been added successfully.'
+            );
+
+            return $this->redirectToRoute('address_book');
+        }
+
+        return $this->render('address_book/add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

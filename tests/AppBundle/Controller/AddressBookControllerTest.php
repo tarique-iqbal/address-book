@@ -40,4 +40,36 @@ class AddressBookControllerTest extends DataFixtureTestCase
         $this->assertContains('/address-book/show/1', $client->getRequest()->getUri());
         $this->assertEquals(1, $client->getCrawler()->filter('img')->count());
     }
+
+    public function testAdd()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/address-book/add');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(9, $crawler->filter('input')->count());
+
+        $client->request(
+            'POST',
+            '/address-book/add',
+            [
+                'address_book' => [
+                    'firstName' => 'Tarique',
+                    'lastName' => 'Iqbal',
+                    'email' => 'test.case@domain.com',
+                    'streetNumber' => 'Junkerfeldele 1',
+                    'zip' => '79211',
+                    'city' => 'Denzlingen',
+                    'country' => 'DE',
+                    'phoneNumber' => '+4910001110001',
+                    'birthDate' => '1983-06-01',
+                ]
+            ]
+        );
+
+        $client->followRedirects();
+        $this->assertTrue($client->getResponse()->isRedirect());
+        $this->assertContains('/address-book/', $client->getRequest()->getUri());
+    }
 }
