@@ -19,6 +19,8 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/web/uploads/address_book/photos/*
+!web/uploads/address_book/photos/.htaccess
 
 /.idea
 /.DS_Store
