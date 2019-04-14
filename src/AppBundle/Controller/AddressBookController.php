@@ -6,6 +6,7 @@ use AppBundle\Entity\AddressBook;
 use AppBundle\Form\AddressBookType;
 use AppBundle\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -158,5 +159,44 @@ class AddressBookController extends AbstractController
         return $this->render('address_book/add.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     *
+     * @Route("/delete/{id}", name="delete_address_book", requirements={"id"="\d+"})
+     */
+    public function delete(int $id): Response
+    {
+        $entityManager = $this
+            ->getDoctrine()
+            ->getManager();
+        $addressBook = $entityManager
+            ->getRepository(AddressBook::class)
+            ->find($id);
+
+        if ($addressBook === null) {
+            throw $this->createNotFoundException(
+                'No Address Book found for id: '.$id
+            );
+        }
+
+        $entityManager->remove($addressBook);
+        $entityManager->flush();
+
+        if ($addressBook->getPhoto() !== null) {
+            $photo = $this->photoDirectory . '/' . $addressBook->getPhoto();
+
+            $fileSystem = new Filesystem();
+            $fileSystem->remove($photo);
+        }
+
+        $this->addFlash(
+            'success',
+            'Address Book has been deleted successfully.'
+        );
+
+        return $this->redirectToRoute('address_book');
     }
 }

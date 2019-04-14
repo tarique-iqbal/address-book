@@ -106,4 +106,18 @@ class AddressBookControllerTest extends DataFixtureTestCase
         $this->assertTrue($client->getResponse()->isRedirect());
         $this->assertContains('/address-book/', $client->getRequest()->getUri());
     }
+
+    public function testDelete()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/address-book/');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+
+        $link = $crawler->filter('a:contains("Delete")')->eq(0)->link();
+        $client->click($link);
+        $client->followRedirects();
+
+        $this->assertTrue($client->getResponse()->isRedirect());
+    }
 }
