@@ -10,7 +10,11 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-7">
-                <img class="img-fluid" src="{{ asset('uploads/address_book/photos/' ~ address_book.photo) }}" alt="{{ address_book.photo }}" />
+                {% if address_book.photo is not null %}
+                    <img class="img-fluid" src="{{ asset('uploads/address_book/photos/' ~ address_book.photo) }}" alt="{{ address_book.photo }}" />
+                {% else %}
+                    <img class="img-fluid" src="{{ asset('uploads/address_book/default_photos/no_photo.png') }}" alt="photo not available" />
+                {% endif %}
             </div>
 
             <div class="col-md-5">
